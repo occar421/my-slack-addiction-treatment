@@ -12,10 +12,14 @@ My personal Slack app modification to prevent the addiction to read new posts.
 ### Run Command
 
 ```sh
-run --allow-read=/path/to/slack/dir,./ --allow-write=/path/to/slack/dir run.ts --slack-dir /path/to/slack/dir
+deno run --allow-read=/path/to/slack/dir,./ --allow-write=/path/to/slack/dir run.ts --slack-dir /path/to/slack/dir
 ```
 
-Windows: `/path/to/slack/dir` -> `%LOCALAPPDATA%\slack`
+In Windows, `/path/to/slack/dir` maybe `%LOCALAPPDATA%\slack`. So in PowerShell, it should run.
+
+```powershell
+deno run --allow-read =$env:LOCALAPPDATA\slack, ./ --allow-write =$env:LOCALAPPDATA\slack run.ts --slack-dir $env:LOCALAPPDATA\slack
+```
 
 ### Create Custom Section with `[suppressor]` suffix
 
