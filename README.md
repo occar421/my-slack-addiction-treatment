@@ -2,6 +2,10 @@
 
 My personal Slack app modification to prevent the addiction to read new posts.
 
+## What this modification do?
+
+Hide custom sections and channels after the special custom section when it's collapsed. The special custom section should have "[suppressor] suffix (default).
+
 ## Requirement
 
 * Deno
@@ -22,7 +26,7 @@ In Windows, `/path/to/slack/dir` maybe `%LOCALAPPDATA%\slack`. So in PowerShell,
 deno run --allow-read = $env:LOCALAPPDATA\slack, ./ --allow-write = $env:LOCALAPPDATA\slack run.ts --slack-dir $env:LOCALAPPDATA\slack
 ```
 
-### Create Custom Section with `[suppressor]` suffix
+### Create Special Custom Section named with `[suppressor]` suffix
 
 Like this.
 
