@@ -33,3 +33,17 @@ Like this.
 Like this.
 
 ![Show how to restart Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/restart.png)
+
+## CLI Options
+
+### `---slack-dir`
+
+Required. It modifies Slack app in the directory.
+
+### `--css-url`
+
+Optional. It injects CSS text fetched from the URL. Default is CSS file in this (root) repository.
+
+## Tips
+
+You can use Dev Tools by running `/slackdevtools` Slack command (like`/remind`).

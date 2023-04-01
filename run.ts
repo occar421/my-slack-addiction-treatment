@@ -5,6 +5,9 @@ import asar from "npm:@electron/asar@3.2.3";
 
 const args = parse(Deno.args);
 const slackDir = args["slack-dir"];
+const cssUrl = args["css-url"] ?? "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css";
+
+
 const resourcePath = join(await pickAppDir(slackDir), "resources", "app.asar");
 
 const backupPath = resourcePath + ".backup";
@@ -12,8 +15,8 @@ await backupIfNeeded(resourcePath, backupPath);
 
 const scriptToInject = `
 document.addEventListener('DOMContentLoaded', async function() {
-     const cssResource = 'https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css';
-     const res = await fetch(cssResource);
+     const cssUrl = '${cssUrl}';
+     const res = await fetch(cssUrl);
      const css = await res.text();
      
      const styleEl = document.createElement('style');
