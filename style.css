@@ -1,5 +1,22 @@
-@layer base {
-    body {
-        color: rebeccapurple;
+/* assuming section heading contains [suppressor] suffix */
+/* .p-channel_sidebar__static_list__item has `position:absolute` already */
+
+@layer modification {
+    @layer remove {
+        .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item {
+            clip: rect(0 0 0 0);
+        }
+    }
+
+    @layer revert {
+        /* if selected channel */
+        .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__channel--selected),
+            /* if section which has mentioned channel */
+        .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading):has(+ .p-channel_sidebar__static_list__item .p-channel_sidebar__channel .p-channel_sidebar__badge),
+            /* if mentioned channel */
+        .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item:has(.p-channel_sidebar__badge) {
+            clip: initial !important;
+        }
+
     }
 }
