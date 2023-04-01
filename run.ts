@@ -4,63 +4,14 @@ import asar from "npm:@electron/asar@3.2.3";
 
 const slackDir = join(Deno.env.get("LOCALAPPDATA"), "./slack");
 
-//
-// Pick up Slack app directory
-//
-const appDirRegex = /app-(\d+.\d+(.\d+)?)/;
+const resourcePath = join(await pickAppDir(slackDir), "resources", "app.asar");
 
-const appVersions = [];
-for await (const entry of Deno.readDir(slackDir)) {
-    if (entry.isDirectory) {
-        const match = appDirRegex.exec(entry.name);
-        if (match) {
-            appVersions.push(match[1]);
-        }
-    }
-}
+const backupPath = resourcePath + ".backup";
+await backupIfNeeded(resourcePath, backupPath);
 
-appVersions.sort(compare);
-const slackAppVersion = appVersions.pop();
-
-const slackAppResource = join(slackDir, `app-${slackAppVersion}`, "resources", "app.asar");
-console.info(`Use "${slackAppResource}".`);
-
-
-//
-// Backup
-//
-const slackAppResourceBackup = slackAppResource + ".backup";
-try {
-    await Deno.stat(slackAppResourceBackup);
-    console.debug(`Backup already exists as "${slackAppResourceBackup}". Skipped.`);
-    // prevent overwrite an original resource after the modification
-} catch (e) {
-    if (e.name === "NotFound") {
-        // make a backup
-        await Deno.copyFile(slackAppResource, slackAppResourceBackup);
-        console.info(`Made a backup as "${slackAppResourceBackup}".`);
-    }
-}
-
-
-//
-// Extract resource in asar
-//
-const slackAppResourceTmpDir = slackAppResource + ".tmp";
-await asar.extractAll(slackAppResource, slackAppResourceTmpDir);
-console.debug(`Resource is extracted to "${slackAppResourceTmpDir}".`);
-
-
-//
-// Inject script
-//
-const targetScript = "dist/preload.bundle.js";
-const cssUrl = "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css";
-const injectionTargetScriptPath = join(slackAppResourceTmpDir, targetScript);
-const content = await Deno.readTextFile(injectionTargetScriptPath);
-const modifiedContent = `${content}
+const scriptToInject = `
 document.addEventListener('DOMContentLoaded', async function() {
-     const cssPath = "${cssUrl}";
+     const cssPath = 'https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css';
      const res = await fetch(cssPath);
      const css = await res.text();
      
@@ -70,12 +21,60 @@ document.addEventListener('DOMContentLoaded', async function() {
      document.head.appendChild(styleEl);
    });
 `;
-await Deno.writeTextFile(injectionTargetScriptPath, modifiedContent);
-console.debug("Injected script.");
+await injectScript(resourcePath, scriptToInject);
 
+async function pickAppDir(slackDir: string) {
+    const regex = /app-(\d+.\d+(.\d+)?)/;
 
-//
-// Pack modified resources
-//
-await asar.createPackage(slackAppResourceTmpDir, slackAppResource);
-console.debug("Resource is re-packed.");
+    const versions = [];
+    for await (const entry of Deno.readDir(slackDir)) {
+        if (entry.isDirectory) {
+            const match = regex.exec(entry.name);
+            if (match) {
+                versions.push(match[1]);
+            }
+        }
+    }
+
+    versions.sort(compare);
+    const version = versions.pop();
+    const appName = `app-${version}`;
+    console.info(`Use "${appName}".`);
+
+    return join(slackDir, appName);
+}
+
+async function backupIfNeeded(resourcePath: string, backupPath: string) {
+    try {
+        await Deno.stat(backupPath);
+        console.debug(`Backup already exists as "${backupPath}". Skipped.`);
+        // prevent overwrite an original resource after the modification
+    } catch (e) {
+        if (e.name === "NotFound") {
+            // make a backup
+            await Deno.copyFile(resourcePath, backupPath);
+            console.info(`Made a backup as "${backupPath}".`);
+        }
+    }
+}
+
+async function injectScript(resourcePath: string, script: string) {
+    // Extract resource in asar
+    const tmpDir = resourcePath + ".tmp";
+    await asar.extractAll(resourcePath, tmpDir);
+    console.debug(`Resource is extracted to "${tmpDir}".`);
+
+    // Inject script
+    const targetFile = "dist/preload.bundle.js";
+    const targetFilePath = join(tmpDir, targetFile);
+    const content = await Deno.readTextFile(targetFilePath);
+    const modifiedContent = `${content}
+${script}
+`;
+    await Deno.writeTextFile(targetFilePath, modifiedContent);
+    console.debug("Injected script.");
+
+    // Pack modified resources
+    await asar.createPackage(tmpDir, resourcePath);
+    console.debug("Resource is re-packed.");
+}
