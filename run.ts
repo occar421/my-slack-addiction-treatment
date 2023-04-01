@@ -7,15 +7,22 @@ const args = parse(Deno.args);
 const slackDir = args["slack-dir"];
 const cssUrl = args["css-url"] ?? "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css";
 
+if (!slackDir) {
+    console.error("`--slack-dir` option is required. See README.md next to this file.");
+    Deno.exit(160);
+}
 
-const resourcePath = join(await pickAppDir(slackDir), "resources", "app.asar");
+await process({slackDir, cssUrl});
 
-const backupPath = resourcePath + ".backup";
-await backupIfNeeded(resourcePath, backupPath);
+async function process(options: { slackDir: string, cssUrl: string }) {
+    const resourcePath = join(await pickAppDir(options.slackDir), "resources", "app.asar");
 
-const scriptToInject = `
+    const backupPath = resourcePath + ".backup";
+    await backupIfNeeded(resourcePath, backupPath);
+
+    const scriptToInject = `
 document.addEventListener('DOMContentLoaded', async function() {
-     const cssUrl = '${cssUrl}';
+     const cssUrl = '${options.cssUrl}';
      const res = await fetch(cssUrl);
      const css = await res.text();
      
@@ -25,7 +32,10 @@ document.addEventListener('DOMContentLoaded', async function() {
      document.head.appendChild(styleEl);
    });
 `;
-await injectScript(resourcePath, scriptToInject);
+    await injectScript(resourcePath, scriptToInject);
+
+    console.info("Done.");
+}
 
 async function pickAppDir(slackDir: string) {
     const regex = /app-(\d+.\d+(.\d+)?)/;
@@ -53,6 +63,9 @@ async function backupIfNeeded(resourcePath: string, backupPath: string) {
         await Deno.stat(backupPath);
         console.debug(`Backup already exists as "${backupPath}". Skipped.`);
         // prevent overwrite an original resource after the modification
+
+        // Clean resource file to remove previous injections.
+        await Deno.copyFile(backupPath, resourcePath);
     } catch (e) {
         if (e.name === "NotFound") {
             // make a backup
