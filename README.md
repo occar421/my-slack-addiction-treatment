@@ -6,6 +6,7 @@ My personal Slack app modification to prevent the addiction to read new posts.
 
 * Deno
 * Slack with custom section (paid plan)
+    * Should be installed via app. Browser version and Windows Store App version are not supported.
 
 ## How to use
 
@@ -25,4 +26,10 @@ deno run --allow-read = $env:LOCALAPPDATA\slack, ./ --allow-write = $env:LOCALAP
 
 Like this.
 
-![img.png](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/section-name.png)
+![Show how to change section name in Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/section-name.png)
+
+### Clear cache and restart Slack if needed
+
+Like this.
+
+![Show how to restart Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/restart.png)
