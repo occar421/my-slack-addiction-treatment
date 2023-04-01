@@ -15,7 +15,7 @@
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading):has(+ .p-channel_sidebar__static_list__item .p-channel_sidebar__channel .p-channel_sidebar__badge),
             /* if mentioned channel */
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item:has(.p-channel_sidebar__badge) {
-            clip: initial !important;
+            clip: initial;
         }
 
     }
