@@ -18,9 +18,11 @@ deno run --allow-read=/path/to/slack/dir,./ --allow-write=/path/to/slack/dir run
 In Windows, `/path/to/slack/dir` maybe `%LOCALAPPDATA%\slack`. So in PowerShell, it should run.
 
 ```powershell
-deno run --allow-read =$env:LOCALAPPDATA\slack, ./ --allow-write =$env:LOCALAPPDATA\slack run.ts --slack-dir $env:LOCALAPPDATA\slack
+deno run --allow-read = $env:LOCALAPPDATA\slack, ./ --allow-write = $env:LOCALAPPDATA\slack run.ts --slack-dir $env:LOCALAPPDATA\slack
 ```
 
 ### Create Custom Section with `[suppressor]` suffix
 
-Like this ![img.png](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/section-name.png).
+Like this.
+
+![img.png](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/section-name.png)
