@@ -6,6 +6,10 @@
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item {
             clip: rect(0 0 0 0);
         }
+
+        .p-channel_sidebar__banner--bottom.p-channel_sidebar__banner--unreads {
+            clip: rect(0 0 0 0);
+        }
     }
 
     @layer revert {
