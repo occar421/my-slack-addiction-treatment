@@ -1,6 +1,53 @@
 /* assuming section heading contains [suppressor] suffix */
 /* .p-channel_sidebar__static_list__item has `position:absolute` already */
 
+@font-face {
+    font-family: "UD デジタル 教科書体 N all";
+    src: local("UD デジタル 教科書体 N-R");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "UD デジタル 教科書体 N all";
+    src: local("UD デジタル 教科書体 N-B");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "UD デジタル 教科書体 NP all";
+    src: local("UD デジタル 教科書体 NP-R");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "UD デジタル 教科書体 NP all";
+    src: local("UD デジタル 教科書体 NP-B");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "UD デジタル 教科書体 NK all";
+    src: local("UD デジタル 教科書体 NK-R");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "UD デジタル 教科書体 NK all";
+    src: local("UD デジタル 教科書体 NK-B");
+    font-weight: 600;
+}
+
+[lang=ja-JP] body,
+[lang=ja-JP] .c-basic_container,
+[lang=ja-JP] .c-texty_input_unstyled,
+[lang=ja-JP] .c-menu {
+    font-family: Calibri, "UD デジタル 教科書体 NK all", Slack-Lato, Slack-Fractions, appleLogo, sans-serif;
+}
+
+code, pre {
+    font-family: "Fira Code", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
+}
+
 @layer modification {
     @layer remove {
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item {
