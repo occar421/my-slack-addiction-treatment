@@ -71,7 +71,7 @@ code, pre {
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-expanded=true],
             /* if collapsed section which has selected channel */
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-expanded=false]:has(+ .p-channel_sidebar__static_list__item .p-channel_sidebar__channel.p-channel_sidebar__channel--selected),
-            /* if mentioned channel */
+            /* if mentioned channel & section */
         .p-channel_sidebar__static_list__item:has(.p-channel_sidebar__badge),
             /* if section which has mentioned channel */
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading):has(+ .p-channel_sidebar__static_list__item .p-channel_sidebar__channel .p-channel_sidebar__badge) {
