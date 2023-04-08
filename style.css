@@ -48,6 +48,11 @@ code, pre {
     font-family: "Fira Code", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
 }
 
+[lang=ja-JP] .p-rich_text_block {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
 @layer modification {
     @layer remove {
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item {
