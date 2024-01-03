@@ -51,3 +51,5 @@ Required. It injects CSS text fetched from the URL. Default is CSS file in this 
 ## Tips
 
 You can use Dev Tools by running `/slackdevtools` Slack command (like`/remind`).
+
+You can serve local css file with `deno run --allow-read --allow-net https://deno.land/x/serve/mod.ts`.
