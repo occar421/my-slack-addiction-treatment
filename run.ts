@@ -5,12 +5,31 @@ import asar from "npm:@electron/asar@3.2.3";
 
 const args = parse(Deno.args);
 const slackDir = args["slack-dir"];
-const cssUrl = args["css-url"] ?? "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css";
+let cssUrl_ = args["css-url"];
 
 if (!slackDir) {
     console.error("`--slack-dir` option is required. See README.md next to this file.");
     Deno.exit(160);
 }
+
+if (!cssUrl_) {
+    console.error("`--css-url` option is required. See README.md next to this file.");
+    Deno.exit(160);
+}
+
+if (cssUrl_ === 'default') {
+    cssUrl_ = "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css";
+} else {
+    try {
+        const url = new URL(cssUrl_);
+        cssUrl_ = url.href;
+    // deno-lint-ignore no-explicit-any
+    } catch (e: any) {
+        console.error(`\`--css-url\` with ${e.message}`);
+        Deno.exit(160);
+    }
+}
+const cssUrl = cssUrl_;
 
 await process({slackDir, cssUrl});
 
