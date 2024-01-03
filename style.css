@@ -45,7 +45,8 @@
 }
 
 code, pre {
-    font-family: "Fira Code", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
+    font-family: "Monaspace Neon", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
+    font-feature-settings: "calt", "liga", "dlig" !important;
 }
 
 [lang=ja-JP] .p-rich_text_block {
