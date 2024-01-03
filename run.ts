@@ -1,9 +1,9 @@
-import {parse} from "https://deno.land/std@0.66.0/flags/mod.ts";
-import {join} from "https://deno.land/std@0.130.0/path/mod.ts";
-import {compare} from "https://deno.land/std@0.182.0/semver/mod.ts";
+import {parseArgs} from "https://deno.land/std@0.210.0/cli/mod.ts";
+import {join} from "https://deno.land/std@0.210.0/path/mod.ts";
+import {compare} from "https://deno.land/std@0.210.0/semver/mod.ts";
 import asar from "npm:@electron/asar@3.2.3";
 
-const args = parse(Deno.args);
+const args = parseArgs(Deno.args);
 const slackDir = args["slack-dir"];
 let cssUrl_ = args["css-url"];
 
@@ -23,7 +23,7 @@ if (cssUrl_ === 'default') {
     try {
         const url = new URL(cssUrl_);
         cssUrl_ = url.href;
-    // deno-lint-ignore no-explicit-any
+        // deno-lint-ignore no-explicit-any
     } catch (e: any) {
         console.error(`\`--css-url\` with ${e.message}`);
         Deno.exit(160);
