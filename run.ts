@@ -1,19 +1,22 @@
 import {parseArgs} from "https://deno.land/std@0.210.0/cli/mod.ts";
 import {join} from "https://deno.land/std@0.210.0/path/mod.ts";
 import {compare, parse, SemVer} from "https://deno.land/std@0.210.0/semver/mod.ts";
+import * as log from "https://deno.land/std@0.210.0/log/mod.ts";
 import asar from "npm:@electron/asar@3.2.3";
+
+const logger = log.getLogger();
 
 const args = parseArgs(Deno.args);
 const slackDir = args["slack-dir"];
 let cssUrl_ = args["css-url"];
 
 if (!slackDir) {
-    console.error("`--slack-dir` option is required. See README.md next to this file.");
+    logger.error("`--slack-dir` option is required. See README.md next to this file.");
     Deno.exit(160);
 }
 
 if (!cssUrl_) {
-    console.error("`--css-url` option is required. See README.md next to this file.");
+    logger.error("`--css-url` option is required. See README.md next to this file.");
     Deno.exit(160);
 }
 
@@ -25,7 +28,7 @@ if (cssUrl_ === 'default') {
         cssUrl_ = url.href;
         // deno-lint-ignore no-explicit-any
     } catch (e: any) {
-        console.error(`\`--css-url\` with ${e.message}`);
+        logger.error(`\`--css-url\` with ${e.message}`);
         Deno.exit(160);
     }
 }
@@ -53,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 `;
     await injectScript(resourcePath, scriptToInject);
 
-    console.info("Done.");
+    logger.info("Done.");
 }
 
 async function pickAppDir(slackDir: string) {
@@ -72,7 +75,7 @@ async function pickAppDir(slackDir: string) {
     versions.sort((v1, v2) => compare(v1[1], v2[1]));
     const version = versions.pop()!;
     const appName = `app-${version[0]}`;
-    console.info(`Use "${appName}".`);
+    logger.info(`Use "${appName}".`);
 
     return join(slackDir, appName);
 }
@@ -80,7 +83,7 @@ async function pickAppDir(slackDir: string) {
 async function backupIfNeeded(resourcePath: string, backupPath: string) {
     try {
         await Deno.stat(backupPath);
-        console.debug(`Backup already exists as "${backupPath}". Skipped.`);
+        logger.debug(`Backup already exists as "${backupPath}". Skipped.`);
         // prevent overwrite an original resource after the modification
 
         // Clean resource file to remove previous injections.
@@ -89,7 +92,7 @@ async function backupIfNeeded(resourcePath: string, backupPath: string) {
         if (e.name === "NotFound") {
             // make a backup
             await Deno.copyFile(resourcePath, backupPath);
-            console.info(`Made a backup as "${backupPath}".`);
+            logger.info(`Made a backup as "${backupPath}".`);
         }
     }
 }
@@ -98,7 +101,7 @@ async function injectScript(resourcePath: string, script: string) {
     // Extract resource in asar
     const tmpDir = resourcePath + ".tmp";
     await asar.extractAll(resourcePath, tmpDir);
-    console.debug(`Resource is extracted to "${tmpDir}".`);
+    logger.debug(`Resource is extracted to "${tmpDir}".`);
 
     // Inject script
     const targetFile = "dist/preload.bundle.js";
@@ -108,9 +111,9 @@ async function injectScript(resourcePath: string, script: string) {
 ${script}
 `;
     await Deno.writeTextFile(targetFilePath, modifiedContent);
-    console.debug("Injected script.");
+    logger.debug("Injected script.");
 
     // Pack modified resources
     await asar.createPackage(tmpDir, resourcePath);
-    console.debug("Resource is re-packed.");
+    logger.debug("Resource is re-packed.");
 }
