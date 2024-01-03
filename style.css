@@ -1,5 +1,6 @@
 /* assuming section heading contains [suppressor] suffix */
 /* .p-channel_sidebar__static_list__item has `position:absolute` already */
+/* As of 2024/01/04, CSS Nesting is not supported in Electron. */
 
 @font-face {
     font-family: "UD デジタル 教科書体 N all";
@@ -62,6 +63,23 @@ code, pre {
 
         .p-channel_sidebar__banner--bottom.p-channel_sidebar__banner--unreads {
             clip: rect(0 0 0 0);
+        }
+    }
+
+    /*noinspection CssUnresolvedCustomProperty*/
+    @layer mute {
+        .p-client_workspace:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) :where(
+        .p-channel_sidebar__list .p-channel_sidebar__channel--unread:not(:has(> .p-channel_sidebar__channel_suffix > .p-channel_sidebar__badge)) .p-channel_sidebar__name,
+        .p-channel_sidebar__list .p-channel_sidebar__section_heading--unreads:not(:has(> .p-channel_sidebar__section_heading_right .p-channel_sidebar__badge)) .p-channel_sidebar__section_heading_label--unreads
+        ) {
+            font-weight: unset !important;
+            color: var(--dt_color-content-sec) !important;
+        }
+
+        .p-client_workspace:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) :where(
+        .p-channel_sidebar__list .p-channel_sidebar__section_heading--unreads:not(:has(> .p-channel_sidebar__section_heading_right .p-channel_sidebar__badge)) .p-channel_sidebar__section_heading_expand_container
+        ) {
+            color: var(--dt_color-content-sec) !important;
         }
     }
 
