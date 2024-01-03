@@ -4,6 +4,18 @@ import {compare, parse, SemVer} from "https://deno.land/std@0.210.0/semver/mod.t
 import * as log from "https://deno.land/std@0.210.0/log/mod.ts";
 import asar from "npm:@electron/asar@3.2.3";
 
+log.setup({
+    handlers: {
+        console: new log.handlers.ConsoleHandler("DEBUG")
+    },
+    loggers: {
+        default: {
+            level: "DEBUG",
+            handlers: ["console"]
+        }
+    }
+})
+
 const logger = log.getLogger();
 
 const args = parseArgs(Deno.args);
