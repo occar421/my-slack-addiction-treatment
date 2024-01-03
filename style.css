@@ -56,11 +56,13 @@ code, pre {
 }
 
 @layer modification {
-    @layer remove {
+    @layer hide {
+        /* hide section after "suppressor section" */
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item {
             clip: rect(0 0 0 0);
         }
 
+        /* hide unread banner */
         .p-channel_sidebar__banner--bottom.p-channel_sidebar__banner--unreads {
             clip: rect(0 0 0 0);
         }
@@ -69,7 +71,9 @@ code, pre {
     /*noinspection CssUnresolvedCustomProperty*/
     @layer mute {
         body:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) :where(
+        /* make channel plain unless with badge(mention) */
         .p-channel_sidebar__list .p-channel_sidebar__channel--unread:not(:has(> .p-channel_sidebar__channel_suffix > .p-channel_sidebar__badge)) .p-channel_sidebar__name,
+        /* make section plain unless with badge(mention) */
         .p-channel_sidebar__list .p-channel_sidebar__section_heading--unreads:not(:has(> .p-channel_sidebar__section_heading_right .p-channel_sidebar__badge)) .p-channel_sidebar__section_heading_label--unreads
         ) {
             font-weight: unset !important;
@@ -77,12 +81,14 @@ code, pre {
         }
 
         body:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) :where(
+        /* make section expander plain unless with badge(mention) */
         .p-channel_sidebar__list .p-channel_sidebar__section_heading--unreads:not(:has(> .p-channel_sidebar__section_heading_right .p-channel_sidebar__badge)) .p-channel_sidebar__section_heading_expand_container
         ) {
             color: var(--dt_color-content-sec) !important;
         }
 
         body:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) :where(
+        /* make channel plain in popover menu unless with badge(mention) */
         .c-popover .p-section_menu .p-section_heading_context_menu__channel:not(:has(.c-mention_badge)) .c-channel_entity__name
         ) {
             font-weight: unset !important;
