@@ -100,6 +100,33 @@
             .p-channel_sidebar__banner--top.p-channel_sidebar__banner--unreads {
                 clip: rect(0 0 0 0);
             }
+
+            /* hide channels at most 20 after "mute on power off" section */
+
+            .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__channel) {
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
+                .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & {
+                    clip: rect(0 0 0 0);
+                }
+            }
         }
     }
 
