@@ -136,7 +136,7 @@
 
             .p-channel_sidebar__channel_icon_prefix {
                 & > svg {
-                    display: none;
+                    display: none !important;
                 }
 
                 &::before {
