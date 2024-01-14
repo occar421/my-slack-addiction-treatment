@@ -58,6 +58,20 @@
 
 
 @layer modification {
+    @layer compact {
+        .p-client_workspace_wrapper {
+            grid-template-columns: 56px auto !important;
+        }
+
+        .p-tab_rail {
+            width: 56px !important;
+        }
+
+        .p-control_strip {
+            width: 56px !important;
+        }
+    }
+
     @layer hide {
         /* hide section after "suppressor section" */
         .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[suppressor\]][aria-expanded=false] ~ .p-channel_sidebar__static_list__item {
