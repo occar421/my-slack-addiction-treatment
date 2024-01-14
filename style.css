@@ -142,7 +142,9 @@
                 /* if mentioned channel & section */
             &:has(.p-channel_sidebar__badge),
                 /* if section which has mentioned channel */
-            &:has(> .p-channel_sidebar__section_heading):has(+ .p-channel_sidebar__static_list__item .p-channel_sidebar__channel .p-channel_sidebar__badge) {
+            &:has(> .p-channel_sidebar__section_heading):has(+ .p-channel_sidebar__static_list__item .p-channel_sidebar__channel .p-channel_sidebar__badge),
+                /* if channel has draft */
+            &:has(.p-channel_sidebar__channel_draft_suffix) {
                 clip: initial;
             }
         }
