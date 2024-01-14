@@ -38,7 +38,7 @@ Like this.
 
 ![Show how to change section name in Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/section-name.png)
 
-### Change your Slack status with 📴 Emoji
+### Change your Slack status with 📴 Emoji to enable "Power Off" mode
 
 See https://slack.com/help/articles/201864558-Set-your-Slack-status-and-availability
 
