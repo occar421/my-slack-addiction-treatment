@@ -76,7 +76,9 @@
         body:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) {
             /* make channel plain unless with badge(mention) */
 
-            .p-channel_sidebar__list .p-channel_sidebar__channel--unread:not(:has(> .p-channel_sidebar__channel_suffix > .p-channel_sidebar__badge)) .p-channel_sidebar__name,
+            .p-channel_sidebar__list .p-channel_sidebar__channel--unread:not(:has(> .p-channel_sidebar__channel_suffix > .p-channel_sidebar__badge)) .p-channel_sidebar__name {
+                font-weight: unset !important;
+            }
                 /* make section plain unless with badge(mention) */
             .p-channel_sidebar__list .p-channel_sidebar__section_heading--unreads:not(:has(> .p-channel_sidebar__section_heading_right .p-channel_sidebar__badge)) .p-channel_sidebar__section_heading_label--unreads {
                 font-weight: unset !important;
@@ -125,6 +127,30 @@
                 .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + &,
                 .p-channel_sidebar__static_list__item:has(> .p-channel_sidebar__section_heading)[aria-label$=\[power_off\]] + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & {
                     clip: rect(0 0 0 0);
+                }
+            }
+
+            .p-channel_sidebar__channel_icon_prefix {
+                & > svg {
+                    display: none;
+                }
+
+                &::before {
+                    color: currentColor;
+                    width: 1em;
+                    height: 1em;
+                    font-size: 16px;
+                    flex-shrink: 0;
+                    content: "";
+                    background: currentColor;
+                }
+
+                &:has(> [data-sidebar-channel-icon=channel])::before {
+                    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.74 3.878a.75.75 0 1 0-1.48-.255L7.68 7H3.75a.75.75 0 0 0 0 1.5h3.67L6.472 14H2.75a.75.75 0 0 0 0 1.5h3.463l-.452 2.623a.75.75 0 0 0 1.478.255l.496-2.878h3.228l-.452 2.623a.75.75 0 0 0 1.478.255l.496-2.878h3.765a.75.75 0 0 0 0-1.5h-3.506l.948-5.5h3.558a.75.75 0 0 0 0-1.5h-3.3l.54-3.122a.75.75 0 0 0-1.48-.255L12.43 7H9.2l.538-3.122ZM11.221 14l.948-5.5H8.942L7.994 14h3.228Z" clip-rule="evenodd"></path></svg>');
+                }
+
+                &:has(> [data-sidebar-channel-icon=lock])::before {
+                    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 1.5A4.5 4.5 0 0 0 5.5 6v1.5h-.25A2.25 2.25 0 0 0 3 9.75v6.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0 0 17 16.25v-6.5a2.25 2.25 0 0 0-2.25-2.25h-.25V6A4.5 4.5 0 0 0 10 1.5Zm3 6V6a3 3 0 1 0-6 0v1.5h6ZM4.5 9.75A.75.75 0 0 1 5.25 9h9.5a.75.75 0 0 1 .75.75v6.5a.25.25 0 0 1-.25.25H4.75a.25.25 0 0 1-.25-.25v-6.5Z" clip-rule="evenodd"></path></svg>');
                 }
             }
         }
