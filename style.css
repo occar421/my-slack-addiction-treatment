@@ -71,8 +71,8 @@
     }
 
     /*noinspection CssUnresolvedCustomProperty*/
-    @layer mute {
-        /* when mute mode */
+    @layer power_off {
+        /* when Power Off mode */
         body:has(.p-ia__nav__user > span > span > img:where([data-stringify-emoji=":mobile_phone_off:"])) {
             /* make channel plain unless with badge(mention) */
 
@@ -93,6 +93,12 @@
 
             .c-popover .p-section_menu .p-section_heading_context_menu__channel:not(:has(.c-mention_badge)) .c-channel_entity__name {
                 font-weight: unset !important;
+            }
+
+            /* hide unread top banner */
+
+            .p-channel_sidebar__banner--top.p-channel_sidebar__banner--unreads {
+                clip: rect(0 0 0 0);
             }
         }
     }
