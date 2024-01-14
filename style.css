@@ -79,7 +79,9 @@
             .p-channel_sidebar__list .p-channel_sidebar__channel--unread:not(:has(> .p-channel_sidebar__channel_suffix > .p-channel_sidebar__badge)) .p-channel_sidebar__name {
                 font-weight: unset !important;
             }
-                /* make section plain unless with badge(mention) */
+
+            /* make section plain unless with badge(mention) */
+
             .p-channel_sidebar__list .p-channel_sidebar__section_heading--unreads:not(:has(> .p-channel_sidebar__section_heading_right .p-channel_sidebar__badge)) .p-channel_sidebar__section_heading_label--unreads {
                 font-weight: unset !important;
                 color: var(--dt_color-content-sec) !important;
@@ -129,6 +131,8 @@
                     clip: rect(0 0 0 0);
                 }
             }
+
+            /* Use fixed channel prefix icon */
 
             .p-channel_sidebar__channel_icon_prefix {
                 & > svg {
