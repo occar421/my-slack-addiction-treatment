@@ -1,6 +1,5 @@
 /* assuming section heading contains [suppressor] suffix */
 /* .p-channel_sidebar__static_list__item has `position:absolute` already */
-/* As of 2024/01/04, CSS Nesting is not supported in Electron. */
 
 @font-face {
     font-family: "UD デジタル 教科書体 N all";
@@ -38,22 +37,25 @@
     font-weight: 600;
 }
 
-[lang=ja-JP] body,
-[lang=ja-JP] .c-basic_container,
-[lang=ja-JP] .c-texty_input_unstyled,
-[lang=ja-JP] .c-menu {
-    font-family: Calibri, "UD デジタル 教科書体 NK all", Slack-Lato, Slack-Fractions, appleLogo, sans-serif;
+[lang=ja-JP] {
+    body,
+    .c-basic_container,
+    .c-texty_input_unstyled,
+    .c-menu {
+        font-family: Calibri, "UD デジタル 教科書体 NK all", Slack-Lato, Slack-Fractions, appleLogo, sans-serif;
+    }
+
+    code, pre {
+        font-family: "Monaspace Neon", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
+        font-feature-settings: "calt", "liga", "dlig" !important;
+    }
+
+    .p-rich_text_block {
+        font-size: 15px;
+        line-height: 1.5;
+    }
 }
 
-code, pre {
-    font-family: "Monaspace Neon", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
-    font-feature-settings: "calt", "liga", "dlig" !important;
-}
-
-[lang=ja-JP] .p-rich_text_block {
-    font-size: 15px;
-    line-height: 1.5;
-}
 
 @layer modification {
     @layer hide {
@@ -62,7 +64,7 @@ code, pre {
             clip: rect(0 0 0 0);
         }
 
-        /* hide unread banner */
+        /* hide unread bottom banner */
         .p-channel_sidebar__banner--bottom.p-channel_sidebar__banner--unreads {
             clip: rect(0 0 0 0);
         }
