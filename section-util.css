@@ -2,59 +2,6 @@
 /* .p-channel_sidebar__static_list__item has `position:absolute` already */
 /* As of 2024/01/04, CSS Nesting is not supported in Electron. */
 
-@font-face {
-    font-family: "UD デジタル 教科書体 N all";
-    src: local("UD デジタル 教科書体 N-R");
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: "UD デジタル 教科書体 N all";
-    src: local("UD デジタル 教科書体 N-B");
-    font-weight: 600;
-}
-
-@font-face {
-    font-family: "UD デジタル 教科書体 NP all";
-    src: local("UD デジタル 教科書体 NP-R");
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: "UD デジタル 教科書体 NP all";
-    src: local("UD デジタル 教科書体 NP-B");
-    font-weight: 600;
-}
-
-@font-face {
-    font-family: "UD デジタル 教科書体 NK all";
-    src: local("UD デジタル 教科書体 NK-R");
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: "UD デジタル 教科書体 NK all";
-    src: local("UD デジタル 教科書体 NK-B");
-    font-weight: 600;
-}
-
-[lang=ja-JP] body,
-[lang=ja-JP] .c-basic_container,
-[lang=ja-JP] .c-texty_input_unstyled,
-[lang=ja-JP] .c-menu {
-    font-family: Calibri, "UD デジタル 教科書体 NK all", Slack-Lato, Slack-Fractions, appleLogo, sans-serif;
-}
-
-code, pre {
-    font-family: "Monaspace Neon", "UD デジタル 教科書体 N all", Monaco, Menlo, Consolas, Courier New, monospace !important;
-    font-feature-settings: "calt", "liga", "dlig" !important;
-}
-
-[lang=ja-JP] .p-rich_text_block {
-    font-size: 15px;
-    line-height: 1.5;
-}
-
 @layer modification {
     @layer hide {
         /* hide section after "suppressor section" */

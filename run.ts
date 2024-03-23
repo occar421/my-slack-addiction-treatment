@@ -56,15 +56,18 @@ async function process(options: { slackDir: string, cssBaseUrl: string }) {
 
     const scriptToInject = `
 document.addEventListener('DOMContentLoaded', async function() {
-     const cssUrl = '${options.cssBaseUrl}/style.css';
-     const res = await fetch(cssUrl);
-     const css = await res.text();
-     
-     const styleEl = document.createElement('style');
-     styleEl.type = 'text/css';
-     styleEl.innerHTML = css; 
-     document.head.appendChild(styleEl);
-   });
+    async function generateStyleElement(url) {
+      const res = await fetch(url);
+      const css = await res.text();
+      
+      const styleEl = document.createElement('style');
+      styleEl.innerHTML = css;
+      return styleEl;
+    }
+    
+    document.head.appendChild(await generateStyleElement('${options.cssBaseUrl}/typography.css'));
+    document.head.appendChild(await generateStyleElement('${options.cssBaseUrl}/section-util.css'));
+});
 `;
     await injectScript(resourcePath, scriptToInject);
 
