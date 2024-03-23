@@ -26,17 +26,21 @@ In Windows, `/path/to/slack/dir` maybe `%LOCALAPPDATA%\slack`. So in PowerShell,
 deno run run.ts --slack-dir $env:LOCALAPPDATA\slack --css-base-url default
 ```
 
+### Clear cache and restart Slack if needed
+
+Like this.
+
+![Show how to restart Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/restart.png)
+
 ### Create Special Custom Section named with `[suppressor]` suffix
 
 Like this.
 
 ![Show how to change section name in Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/section-name.png)
 
-### Clear cache and restart Slack if needed
+### Change your Slack status with 📴 Emoji to enable "Power Off" mode
 
-Like this.
-
-![Show how to restart Slack](https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/restart.png)
+See https://slack.com/help/articles/201864558-Set-your-Slack-status-and-availability
 
 ## CLI Options
 
