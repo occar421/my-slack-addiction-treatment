@@ -20,35 +20,35 @@ const logger = log.getLogger();
 
 const args = parseArgs(Deno.args);
 const slackDir = args["slack-dir"];
-let cssUrl_ = args["css-url"];
+let cssBaseUrl_ = args["css-base-url"];
 
 if (!slackDir) {
     logger.error("`--slack-dir` option is required. See README.md next to this file.");
     Deno.exit(160);
 }
 
-if (!cssUrl_) {
-    logger.error("`--css-url` option is required. See README.md next to this file.");
+if (!cssBaseUrl_) {
+    logger.error("`--css-base-url` option is required. See README.md next to this file.");
     Deno.exit(160);
 }
 
-if (cssUrl_ === 'default') {
-    cssUrl_ = "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/style.css";
+if (cssBaseUrl_ === 'default') {
+    cssBaseUrl_ = "https://raw.githubusercontent.com/occar421/my-slack-addiction-treatment/main/";
 } else {
     try {
-        const url = new URL(cssUrl_);
-        cssUrl_ = url.href;
+        const url = new URL(cssBaseUrl_);
+        cssBaseUrl_ = url.href;
         // deno-lint-ignore no-explicit-any
     } catch (e: any) {
-        logger.error(`\`--css-url\` with ${e.message}`);
+        logger.error(`\`--css-base-url\` with ${e.message}`);
         Deno.exit(160);
     }
 }
-const cssUrl = cssUrl_;
+const cssBaseUrl = cssBaseUrl_;
 
-await process({slackDir, cssUrl});
+await process({slackDir, cssBaseUrl});
 
-async function process(options: { slackDir: string, cssUrl: string }) {
+async function process(options: { slackDir: string, cssBaseUrl: string }) {
     const resourcePath = join(await pickAppDir(options.slackDir), "resources", "app.asar");
 
     const backupPath = resourcePath + ".backup";
@@ -56,7 +56,7 @@ async function process(options: { slackDir: string, cssUrl: string }) {
 
     const scriptToInject = `
 document.addEventListener('DOMContentLoaded', async function() {
-     const cssUrl = '${options.cssUrl}';
+     const cssUrl = '${options.cssBaseUrl}/style.css';
      const res = await fetch(cssUrl);
      const css = await res.text();
      

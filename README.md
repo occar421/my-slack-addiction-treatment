@@ -17,13 +17,13 @@ Hide custom sections and channels after the special custom section when it's col
 ### Run Command
 
 ```sh
-deno run run.ts --slack-dir /path/to/slack/dir --css-url default
+deno run run.ts --slack-dir /path/to/slack/dir --css-base-url default
 ```
 
 In Windows, `/path/to/slack/dir` maybe `%LOCALAPPDATA%\slack`. So in PowerShell, it should run.
 
 ```powershell
-deno run run.ts --slack-dir $env:LOCALAPPDATA\slack --css-url default
+deno run run.ts --slack-dir $env:LOCALAPPDATA\slack --css-base-url default
 ```
 
 ### Create Special Custom Section named with `[suppressor]` suffix
@@ -44,12 +44,12 @@ Like this.
 
 Required. It modifies Slack app in the directory.
 
-### `--css-url`
+### `--css-base-url`
 
-Required. It injects CSS text fetched from the URL. Default is CSS file in this (root) repository.
+Required. It injects CSS text fetched from the URL based on this option.
 
 ## Tips
 
 You can use Dev Tools by running `/slackdevtools` Slack command (like`/remind`).
 
-You can serve local css file with `deno run --allow-read --allow-net https://deno.land/x/serve/mod.ts --cors`.
+You can serve local css file with `deno run --allow-read --allow-net https://deno.land/x/serve/mod.ts --cors --port 8080` and `deno run run.ts --slack-dir $env:LOCALAPPDATA\slack --css-base-url http://localhost:8080/`
