@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 async function pickAppDir(slackDir: string) {
-    const regex = /app-(\d+.\d+(.\d+)?)/;
+    const regex = /^app-(\d+.\d+(.\d+)?)$/;
 
     const versions: [string, SemVer][] = [];
     for await (const entry of Deno.readDir(slackDir)) {
