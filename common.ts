@@ -1,14 +1,26 @@
 import {join} from "https://deno.land/std@0.210.0/path/mod.ts";
 import {compare, parse, SemVer} from "https://deno.land/std@0.210.0/semver/mod.ts";
-import * as log from "https://deno.land/std@0.210.0/log/mod.ts";
 
-const logger = log.getLogger();
+export async function getPaths(slackDir: string) {
+    const latestAppDir = await pickLatestAppDir(slackDir);
+    const resourcePath = join(latestAppDir, "resources", "app.asar");
+    const exePath = join(latestAppDir, "slack.exe");
 
-export async function getResourcePath(slackDir: string) {
-    return join(await pickAppDir(slackDir), "resources", "app.asar");
+    const resourceBackupPath = `${resourcePath}.backup`;
+    const exeBackupPath = `${exePath}.backup`;
+
+    return {
+        latestAppDir,
+        resourcePath,
+        exePath,
+        resourceBackupPath,
+        exeBackupPath,
+    }
 }
 
-async function pickAppDir(slackDir: string) {
+export type Paths = Awaited<ReturnType<typeof getPaths>>;
+
+async function pickLatestAppDir(slackDir: string) {
     const regex = /^app-(\d+.\d+(.\d+)?)$/;
 
     const versions: [string, SemVer][] = [];
@@ -24,11 +36,6 @@ async function pickAppDir(slackDir: string) {
     versions.sort((v1, v2) => compare(v1[1], v2[1]));
     const version = versions.pop()!;
     const appName = `app-${version[0]}`;
-    logger.info(`Use "${appName}".`);
 
     return join(slackDir, appName);
-}
-
-export function getBackupPath(resourcePath: string) {
-    return resourcePath + ".backup";
 }
