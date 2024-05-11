@@ -7,35 +7,29 @@ const logger = log.getLogger();
 export const recoverCommand = new Command<{ slackDir: string }>()
     .description("Recover from backup file.")
     .action(async ({slackDir}) => {
-        const {latestAppDir, resourcePath, resourceBackupPath, exePath, exeBackupPath} = await getPaths(slackDir);
+        const paths = await getPaths(slackDir);
 
-        logger.info(`Use "${latestAppDir}".`);
+        logger.info(`Use "${paths.latestAppDir}".`);
 
-        try {
-            await Deno.stat(resourceBackupPath);
-            logger.debug(`Resource backup exists as "${resourceBackupPath}".`);
-            await Deno.copyFile(resourceBackupPath, resourcePath);
-        } catch (e) {
-            if (e.name === "NotFound") {
-                logger.error(`No backup for ${resourcePath}.`);
+        const orders = [
+            {name: "resource", original: paths.resourcePath, backup: paths.resourceBackupPath},
+            {name: "executable", original: paths.exePath, backup: paths.exeBackupPath},
+        ];
+
+        for (const {name, original, backup} of orders) {
+            try {
+                await Deno.stat(backup);
+                logger.debug(`The ${name} backup exists as "${backup}".`);
+                await Deno.copyFile(backup, original);
+            } catch (e) {
+                if (e.name === "NotFound") {
+                    logger.error(`No ${name} backup for ${original}.`);
+                    Deno.exit(160);
+                }
+                logger.error("Unknown error.");
                 Deno.exit(160);
             }
-            logger.error("Unknown error.");
-            Deno.exit(160);
         }
 
-        try {
-            await Deno.stat(exeBackupPath);
-            logger.debug(`.exe backup exists as "${exeBackupPath}".`);
-            await Deno.copyFile(exeBackupPath, exePath);
-        } catch (e) {
-            if (e.name === "NotFound") {
-                logger.error(`No backup for ${exePath}.`);
-                Deno.exit(160);
-            }
-            logger.error("Unknown error.");
-            Deno.exit(160);
-        }
-
-        logger.info(`Recovered from ${resourceBackupPath} and ${exeBackupPath}.`);
+        logger.info(`Recovered from ${paths.resourceBackupPath} and ${paths.exeBackupPath}.`);
     })

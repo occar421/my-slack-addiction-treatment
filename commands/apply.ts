@@ -45,36 +45,28 @@ document.addEventListener('DOMContentLoaded', async function() {
         await injectScript(paths.resourcePath, scriptToInject);
 
         logger.info("Done.");
-    })
+    });
 
-async function backupIfNeeded({resourcePath, resourceBackupPath, exePath, exeBackupPath}: Paths) {
-    try {
-        await Deno.stat(resourceBackupPath);
-        logger.debug(`Resource backup already exists as "${resourceBackupPath}". Skipped.`);
-        // prevent overwrite an original resource after the modification
+async function backupIfNeeded(paths: Paths) {
+    const orders = [
+        {name: "resource", original: paths.resourcePath, backup: paths.resourceBackupPath},
+        {name: "executable", original: paths.exePath, backup: paths.exeBackupPath},
+    ];
 
-        // Clean resource file to remove previous injections.
-        await Deno.copyFile(resourceBackupPath, resourcePath);
-    } catch (e) {
-        if (e.name === "NotFound") {
-            // make a backup
-            await Deno.copyFile(resourcePath, resourceBackupPath);
-            logger.info(`Made a resource backup as "${resourceBackupPath}".`);
-        }
-    }
+    for (const {name, original, backup} of orders) {
+        try {
+            await Deno.stat(backup);
+            logger.debug(`The ${name} backup already exists as "${backup}". Skipped.`);
+            // prevent overwrite an original file after the modification
 
-    try {
-        await Deno.stat(exeBackupPath);
-        logger.debug(`.exe backup already exists as "${exeBackupPath}". Skipped.`);
-        // prevent overwrite an original .exe after the modification
-
-        // Clean .exe file to remove previous injections.
-        await Deno.copyFile(exeBackupPath, exePath);
-    } catch (e) {
-        if (e.name === "NotFound") {
-            // make a backup
-            await Deno.copyFile(exePath, exeBackupPath);
-            logger.info(`Made a .exe backup as "${exeBackupPath}".`);
+            // Clean file to remove previous injections.
+            await Deno.copyFile(original, backup);
+        } catch (e) {
+            if (e.name === "NotFound") {
+                // make a backup
+                await Deno.copyFile(original, backup);
+                logger.info(`Made a ${name} backup as "${backup}". Skipped.".`);
+            }
         }
     }
 }
