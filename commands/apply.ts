@@ -1,5 +1,7 @@
 import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/command.ts";
 import * as log from "https://deno.land/std@0.210.0/log/mod.ts";
+import {crypto} from "https://deno.land/std@0.210.0/crypto/mod.ts";
+import {encodeHex} from "https://deno.land/std@0.210.0/encoding/hex.ts";
 import {join} from "https://deno.land/std@0.210.0/path/join.ts";
 import asar from "npm:@electron/asar@3.2.10";
 import {ValidationError} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/_errors.ts";
@@ -42,7 +44,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.head.appendChild(await generateStyleElement('${cssBaseUrl}/section-util.css'));
 });
 `;
+
+        const originalResourceHash = await getAsarHeaderHash(paths.resourcePath);
+
         await injectScript(paths.resourcePath, scriptToInject);
+
+        const modifiedResourceHash = await getAsarHeaderHash(paths.resourcePath);
+
+        console.log(originalResourceHash, modifiedResourceHash);
 
         logger.info("Done.");
     });
@@ -78,7 +87,7 @@ async function injectScript(resourcePath: string, script: string) {
     logger.debug(`Resource is extracted to "${tmpDir}".`);
 
     // Inject script
-    const targetFile = join(...TARGET_FILE_PATH);
+    const targetFile = join("dist", "preload.bundle.js");
     const targetFilePath = join(tmpDir, targetFile);
     const content = await Deno.readTextFile(targetFilePath);
     const modifiedContent = `${content}
@@ -90,4 +99,13 @@ ${script}
     // Pack modified resources
     await asar.createPackage(tmpDir, resourcePath);
     logger.debug("Resource is re-packed.");
+}
+
+async function getAsarHeaderHash(resourcePath: string) {
+    // https://www.electronjs.org/docs/latest/tutorial/asar-integrity#providing-the-header-hash
+    // > ASAR integrity validates the contents of the ASAR archive against the header hash that you provide on package time.
+    const encoder = new TextEncoder();
+    const headerString = asar.getRawHeader(resourcePath).headerString;
+    const buffer = await crypto.subtle.digest("SHA-256", encoder.encode(headerString));
+    return encodeHex(buffer);
 }
