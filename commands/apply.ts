@@ -1,7 +1,7 @@
 import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/command.ts";
 import * as log from "https://deno.land/std@0.210.0/log/mod.ts";
 import {join} from "https://deno.land/std@0.210.0/path/join.ts";
-import asar from "npm:@electron/asar@3.2.3";
+import asar from "npm:@electron/asar@3.2.10";
 import {ValidationError} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/_errors.ts";
 import {getPaths, Paths} from "../common.ts";
 
@@ -60,7 +60,7 @@ async function backupIfNeeded(paths: Paths) {
             // prevent overwrite an original file after the modification
 
             // Clean file to remove previous injections.
-            await Deno.copyFile(original, backup);
+            await Deno.copyFile(backup, original);
         } catch (e) {
             if (e.name === "NotFound") {
                 // make a backup
@@ -74,11 +74,11 @@ async function backupIfNeeded(paths: Paths) {
 async function injectScript(resourcePath: string, script: string) {
     // Extract resource in asar
     const tmpDir = resourcePath + ".tmp";
-    await asar.extractAll(resourcePath, tmpDir);
+    asar.extractAll(resourcePath, tmpDir);
     logger.debug(`Resource is extracted to "${tmpDir}".`);
 
     // Inject script
-    const targetFile = "dist/preload.bundle.js";
+    const targetFile = join(...TARGET_FILE_PATH);
     const targetFilePath = join(tmpDir, targetFile);
     const content = await Deno.readTextFile(targetFilePath);
     const modifiedContent = `${content}

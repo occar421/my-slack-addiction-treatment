@@ -2,9 +2,18 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:@electron/asar@3.2.10": "npm:@electron/asar@3.2.10",
       "npm:@electron/asar@3.2.3": "npm:@electron/asar@3.2.3"
     },
     "npm": {
+      "@electron/asar@3.2.10": {
+        "integrity": "sha512-mvBSwIBUeiRscrCeJE1LwctAriBj65eUDm0Pc11iE5gRwzkmsdbS7FnZ1XUWjpSeQWL1L5g12Fc/SchPM9DUOw==",
+        "dependencies": {
+          "commander": "commander@5.1.0",
+          "glob": "glob@7.2.3",
+          "minimatch": "minimatch@3.1.2"
+        }
+      },
       "@electron/asar@3.2.3": {
         "integrity": "sha512-wmOfE6szYyqZhRIiLH+eyZEp+bGcJI0OD/SCvSUrfBE0jvauyGYO2ZhpWxmNCcDojKu5DYrsVqT5BOCZZ01XIg==",
         "dependencies": {
