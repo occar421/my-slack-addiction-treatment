@@ -17,13 +17,7 @@ Hide custom sections and channels after the special custom section when it's col
 ### Run Command
 
 ```sh
-deno run run.ts --slack-dir /path/to/slack/dir --css-base-url default
-```
-
-In Windows, `/path/to/slack/dir` maybe `%LOCALAPPDATA%\slack`. So in PowerShell, it should run.
-
-```powershell
-deno run run.ts --slack-dir $env:LOCALAPPDATA\slack --css-base-url default
+deno run run.ts
 ```
 
 ### Clear cache and restart Slack if needed
@@ -42,18 +36,8 @@ Like this.
 
 See https://slack.com/help/articles/201864558-Set-your-Slack-status-and-availability
 
-## CLI Options
-
-### `---slack-dir`
-
-Required. It modifies Slack app in the directory.
-
-### `--css-base-url`
-
-Required. It injects CSS text fetched from the URL based on this option.
-
 ## Tips
 
 You can use Dev Tools by running `/slackdevtools` Slack command (like`/remind`).
 
-You can serve local css file with `deno run --allow-read --allow-net https://deno.land/x/serve/mod.ts --cors --port 8080` and `deno run run.ts --slack-dir $env:LOCALAPPDATA\slack --css-base-url http://localhost:8080/`
+You can serve local css file with `deno run --allow-read --allow-net https://deno.land/x/serve/mod.ts --cors --port 8080` and `deno run run.ts --css-base-url http://localhost:8080/`
