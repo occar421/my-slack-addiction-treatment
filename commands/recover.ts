@@ -38,5 +38,4 @@ export const recoverCommand = new Command<{ slackDir: string }>()
         }
 
         logger.info(`Recovered from ${resourceBackupPath} and ${exeBackupPath}.`);
-        Deno.exit(0);
     })
