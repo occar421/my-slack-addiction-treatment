@@ -19,12 +19,17 @@ log.setup({
 const logger = log.getLogger();
 
 const args = parseArgs(Deno.args);
+const isRecovery = args["recovery"];
 const slackDir = args["slack-dir"];
 let cssBaseUrl_ = args["css-base-url"];
 
 if (!slackDir) {
     logger.error("`--slack-dir` option is required. See README.md next to this file.");
     Deno.exit(160);
+}
+
+if (isRecovery) {
+    await recover({slackDir});
 }
 
 if (!cssBaseUrl_) {
@@ -49,9 +54,8 @@ const cssBaseUrl = cssBaseUrl_;
 await process({slackDir, cssBaseUrl});
 
 async function process(options: { slackDir: string, cssBaseUrl: string }) {
-    const resourcePath = join(await pickAppDir(options.slackDir), "resources", "app.asar");
-
-    const backupPath = resourcePath + ".backup";
+    const resourcePath = await getResourcePath(options.slackDir);
+    const backupPath = getBackupPath(resourcePath);
     await backupIfNeeded(resourcePath, backupPath);
 
     const scriptToInject = `
@@ -72,6 +76,32 @@ document.addEventListener('DOMContentLoaded', async function() {
     await injectScript(resourcePath, scriptToInject);
 
     logger.info("Done.");
+    Deno.exit(0);
+}
+
+async function recover(options: { slackDir: string }) {
+    const resourcePath = await getResourcePath(options.slackDir);
+    const backupPath = getBackupPath(resourcePath);
+
+    try {
+        await Deno.stat(backupPath);
+        logger.debug(`Backup already exists as "${backupPath}".`);
+        await Deno.copyFile(backupPath, resourcePath);
+    } catch (e) {
+        if (e.name === "NotFound") {
+            logger.error(`No backup for ${resourcePath}.`);
+            Deno.exit(160);
+        }
+        logger.error("Unknown error.");
+        Deno.exit(160);
+    }
+
+    logger.info(`Recovered from ${backupPath}.`);
+    Deno.exit(0);
+}
+
+async function getResourcePath(slackDir: string) {
+    return join(await pickAppDir(slackDir), "resources", "app.asar");
 }
 
 async function pickAppDir(slackDir: string) {
@@ -93,6 +123,10 @@ async function pickAppDir(slackDir: string) {
     logger.info(`Use "${appName}".`);
 
     return join(slackDir, appName);
+}
+
+function getBackupPath(resourcePath: string) {
+    return resourcePath + ".backup";
 }
 
 async function backupIfNeeded(resourcePath: string, backupPath: string) {
