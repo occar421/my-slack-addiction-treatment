@@ -24,31 +24,12 @@ export const applyCommand = new Command<{ slackDir: string }>()
     })
     .action(async ({slackDir, cssBaseUrl}) => {
         const paths = await getPaths(slackDir);
-
         logger.info(`Use "${paths.latestAppDir}".`);
 
         await backupIfNeeded(paths);
 
-        const scriptToInject = `
-document.addEventListener('DOMContentLoaded', async function() {
-    async function generateStyleElement(url) {
-      const res = await fetch(url);
-      const css = await res.text();
-      
-      const styleEl = document.createElement('style');
-      styleEl.innerHTML = css;
-      return styleEl;
-    }
-    
-    document.head.appendChild(await generateStyleElement('${cssBaseUrl}/typography.css'));
-    document.head.appendChild(await generateStyleElement('${cssBaseUrl}/section-util.css'));
-});
-`;
-
         const originalResourceHash = await getAsarHeaderHash(paths.resourcePath);
-
-        await injectScript(paths.resourcePath, scriptToInject);
-
+        await injectScript(paths.resourcePath, cssBaseUrl);
         const modifiedResourceHash = await getAsarHeaderHash(paths.resourcePath);
 
         console.log(originalResourceHash, modifiedResourceHash);
@@ -80,7 +61,7 @@ async function backupIfNeeded(paths: Paths) {
     }
 }
 
-async function injectScript(resourcePath: string, script: string) {
+async function injectScript(resourcePath: string, cssBaseUrl: string) {
     // Extract resource in asar
     const tmpDir = resourcePath + ".tmp";
     asar.extractAll(resourcePath, tmpDir);
@@ -90,8 +71,22 @@ async function injectScript(resourcePath: string, script: string) {
     const targetFile = join("dist", "preload.bundle.js");
     const targetFilePath = join(tmpDir, targetFile);
     const content = await Deno.readTextFile(targetFilePath);
+
     const modifiedContent = `${content}
-${script}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    async function generateStyleElement(url) {
+      const res = await fetch(url);
+      const css = await res.text();
+      
+      const styleEl = document.createElement('style');
+      styleEl.innerHTML = css;
+      return styleEl;
+    }
+    
+    document.head.appendChild(await generateStyleElement('${cssBaseUrl}/typography.css'));
+    document.head.appendChild(await generateStyleElement('${cssBaseUrl}/section-util.css'));
+});
 `;
     await Deno.writeTextFile(targetFilePath, modifiedContent);
     logger.debug("Injected script.");
