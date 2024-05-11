@@ -1,7 +1,7 @@
 import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/command.ts";
 import * as log from "https://deno.land/std@0.210.0/log/mod.ts";
 import {crypto} from "https://deno.land/std@0.210.0/crypto/mod.ts";
-import {encodeHex} from "https://deno.land/std@0.210.0/encoding/hex.ts";
+import {decodeHex, encodeHex} from "https://deno.land/std@0.210.0/encoding/hex.ts";
 import {join} from "https://deno.land/std@0.210.0/path/join.ts";
 import asar from "npm:@electron/asar@3.2.10";
 import {ValidationError} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/_errors.ts";
@@ -32,7 +32,7 @@ export const applyCommand = new Command<{ slackDir: string }>()
         await injectScript(paths.resourcePath, cssBaseUrl);
         const modifiedResourceHash = await getAsarHeaderHash(paths.resourcePath);
 
-        console.log(originalResourceHash, modifiedResourceHash);
+        await replaceIntegrityHash(paths, {original: originalResourceHash, modified: modifiedResourceHash});
 
         logger.info("Done.");
     });
@@ -46,7 +46,7 @@ async function backupIfNeeded(paths: Paths) {
     for (const {name, original, backup} of orders) {
         try {
             await Deno.stat(backup);
-            logger.debug(`The ${name} backup already exists as "${backup}". Skipped.`);
+            logger.info(`The ${name} backup already exists as "${backup}". Skipped.`);
             // prevent overwrite an original file after the modification
 
             // Clean file to remove previous injections.
@@ -103,4 +103,13 @@ async function getAsarHeaderHash(resourcePath: string) {
     const headerString = asar.getRawHeader(resourcePath).headerString;
     const buffer = await crypto.subtle.digest("SHA-256", encoder.encode(headerString));
     return encodeHex(buffer);
+}
+
+async function replaceIntegrityHash(paths: Paths, hashes: { original: string, modified: string }) {
+    logger.info(`Replaced integrity hash to "${hashes.modified}" from "${hashes.original}".`);
+
+    const binaryString = await Deno.readFile(paths.exePath);
+    const hex = encodeHex(binaryString);
+    const modifiedBinaryString = hex.replace(encodeHex(hashes.original), encodeHex(hashes.modified));
+    await Deno.writeFile(paths.exePath, decodeHex(modifiedBinaryString));
 }
