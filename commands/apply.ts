@@ -93,23 +93,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Pack modified resources
     await asar.createPackage(tmpDir, resourcePath);
-    logger.debug("Resource is re-packed.");
+    logger.debug("Re-packed resource");
 }
 
 async function getAsarHeaderHash(resourcePath: string) {
     // https://www.electronjs.org/docs/latest/tutorial/asar-integrity#providing-the-header-hash
     // > ASAR integrity validates the contents of the ASAR archive against the header hash that you provide on package time.
-    const encoder = new TextEncoder();
     const headerString = asar.getRawHeader(resourcePath).headerString;
-    const buffer = await crypto.subtle.digest("SHA-256", encoder.encode(headerString));
+    const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(headerString));
     return encodeHex(buffer);
 }
 
 async function replaceIntegrityHash(paths: Paths, hashes: { original: string, modified: string }) {
-    logger.info(`Replaced integrity hash to "${hashes.modified}" from "${hashes.original}".`);
-
     const binaryString = await Deno.readFile(paths.exePath);
     const hex = encodeHex(binaryString);
     const modifiedBinaryString = hex.replace(encodeHex(hashes.original), encodeHex(hashes.modified));
     await Deno.writeFile(paths.exePath, decodeHex(modifiedBinaryString));
+
+    logger.info(`Replaced integrity hash to "${hashes.modified}" from "${hashes.original}".`);
 }
